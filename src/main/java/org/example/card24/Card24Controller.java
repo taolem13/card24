@@ -7,16 +7,18 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import okhttp3.*;
+import net.objecthunter.exp4j.Expression;
+import net.objecthunter.exp4j.ExpressionBuilder;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import java.io.IOException;
 import java.util.*;
 
 public class Card24Controller {
     private static final String IMAGE_PATH = "/PlayingCards/";
     private static final String[] SUITS = {"clubs", "diamonds", "hearts", "spades"};
-
+    private static final String OPENAI_API_KEY = "";
+    private static final String OPENAI_ENDPOINT = "https://api.openai.com/v1/chat/completions";
     @FXML
     private ImageView c1;
 
@@ -44,7 +46,12 @@ public class Card24Controller {
 
     @FXML
     void onhintBtnPress(ActionEvent event) {
-
+        String hint = getHintFromOpenAI();
+        if (hint != null) {
+            showAlert("Hint", hint);
+        } else {
+            showAlert("Error", "Could not retrieve a hint.");
+        }
     }
     @FXML
     private void initialize() {
@@ -76,6 +83,7 @@ public class Card24Controller {
         }
 
         try {
+            System.out.println("Evaluating: " + expression); //Debug
             double result = evaluateExpression(expression);
             if (Math.abs(result - 24) < 1e-6) { // Allow small floating-point error
                 showAlert("Correct!", "Your expression evaluates to 24!");
@@ -144,9 +152,9 @@ public class Card24Controller {
         return numbers;
     }
 
-    private double evaluateExpression(String expression) throws ScriptException {
-        ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
-        return (double) engine.eval(expression);
+    private double evaluateExpression(String expression) {
+        Expression exp = new ExpressionBuilder(expression).build();
+        return exp.evaluate();
     }
 
     private void showAlert(String title, String message) {
@@ -155,5 +163,48 @@ public class Card24Controller {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    private String getHintFromOpenAI() {
+        OkHttpClient client = new OkHttpClient();
+        String prompt = "Given these numbers: " + Arrays.toString(cardValues) +
+                ", provide a mathematical hint to help form an expression that equals 24 using +, -, *, /.";
+
+        String json = "{"
+                + "\"model\": \"gpt-4\","
+                + "\"messages\": [{\"role\": \"user\", \"content\": \"" + prompt + "\"}],"
+                + "\"max_tokens\": 50"
+                + "}";
+
+        RequestBody body = RequestBody.create(json, MediaType.get("application/json; charset=utf-8"));
+
+        Request request = new Request.Builder()
+                .url(OPENAI_ENDPOINT)
+                .addHeader("Authorization", "Bearer " + OPENAI_API_KEY)
+                .addHeader("Content-Type", "application/json")
+                .post(body)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (response.body() != null) {
+                String responseBody = response.body().string();
+                return extractHintFromResponse(responseBody);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private String extractHintFromResponse(String responseBody) {
+        int startIndex = responseBody.indexOf("\"content\": \"");
+        if (startIndex != -1) {
+            startIndex += 11;
+            int endIndex = responseBody.indexOf("\"", startIndex);
+            if (endIndex != -1) {
+                return responseBody.substring(startIndex, endIndex);
+            }
+        }
+        return "No hint available.";
     }
 }

@@ -11,7 +11,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.card24.Card24Controller">
    <children>
-      <HBox layoutY="71.0" prefHeight="258.0" prefWidth="600.0">
+      <HBox layoutY="64.0" prefHeight="265.0" prefWidth="600.0" style="-fx-background-color: white; -fx-border-color: purple; -fx-border-width: 5;">
          <children>
             <ImageView fx:id="c1" fitHeight="195.0" fitWidth="152.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="c2" fitHeight="195.0" fitWidth="152.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
@@ -19,9 +19,9 @@
             <ImageView fx:id="c4" fitHeight="195.0" fitWidth="145.0" layoutX="314.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </HBox>
-      <HBox layoutX="-1.0" prefHeight="100.0" prefWidth="601.0">
+      <HBox layoutX="-1.0" prefHeight="65.0" prefWidth="611.0" style="-fx-background-color: black;">
          <children>
-            <Button fx:id="hintBtn" mnemonicParsing="false" onAction="#onhintBtnPress" prefHeight="47.0" prefWidth="116.0" text="Hint?">
+            <Button fx:id="hintBtn" mnemonicParsing="false" onAction="#onhintBtnPress" prefHeight="47.0" prefWidth="116.0" style="-fx-background-color: purple; -fx-border-color: white;" text="Hint?" textFill="#f2f2f2">
                <font>
                   <Font name="Centaur" size="18.0" />
                </font>
@@ -29,7 +29,7 @@
                   <Insets left="50.0" top="10.0" />
                </HBox.margin>
             </Button>
-            <Button fx:id="refreshBtn" mnemonicParsing="false" onAction="#onrefreshBtnPress" prefHeight="47.0" prefWidth="115.0" text="Refresh">
+            <Button fx:id="refreshBtn" mnemonicParsing="false" onAction="#onrefreshBtnPress" prefHeight="47.0" prefWidth="115.0" style="-fx-background-color: purple; -fx-border-color: white;" text="Refresh" textFill="WHITE">
                <font>
                   <Font name="Centaur" size="18.0" />
                </font>
@@ -39,9 +39,9 @@
             </Button>
          </children>
       </HBox>
-      <HBox layoutY="300.0" prefHeight="100.0" prefWidth="601.0">
+      <HBox layoutY="300.0" prefHeight="100.0" prefWidth="611.0" style="-fx-background-color: black;">
          <children>
-            <Label text="Enter a valid expression: ">
+            <Label text="Enter a valid expression: " textFill="#f8f8f8">
                <font>
                   <Font name="Centaur" size="18.0" />
                </font>
@@ -54,13 +54,16 @@
                   <Insets top="10.0" />
                </HBox.margin>
             </TextField>
-            <Button fx:id="verifyBtn" mnemonicParsing="false" onAction="#onverifyBtnPress" prefHeight="48.0" prefWidth="117.0" text="Verify">
+            <Button fx:id="verifyBtn" mnemonicParsing="false" onAction="#onverifyBtnPress" prefHeight="48.0" prefWidth="117.0" style="-fx-background-color: purple; -fx-border-color: white;" text="Verify" textFill="WHITE">
                <font>
                   <Font name="Centaur" size="18.0" />
                </font>
                <HBox.margin>
                   <Insets left="20.0" top="10.0" />
                </HBox.margin>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
             </Button>
          </children>
       </HBox>
